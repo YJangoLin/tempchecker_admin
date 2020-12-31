@@ -4,6 +4,8 @@ import com.baomidou.mybatisplus.annotation.FieldFill;
 import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 
 import javax.validation.constraints.Email;
@@ -18,6 +20,7 @@ import java.util.Date;
 @Data
 @TableName("sys_user_info")
 public class UserInfo {
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId
     private Long id;
 

@@ -3,6 +3,8 @@ package com.lzl.tempchecker_admin.module.sys.dao;
 import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lzl.tempchecker_admin.module.sys.entity.User;
+import com.lzl.tempchecker_admin.module.sys.service.UserInfoService;
+import com.lzl.tempchecker_admin.module.sys.service.UserService;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -17,6 +19,9 @@ class UserDaoTest {
 
     @Autowired
     UserDao userDao;
+    @Autowired
+    UserInfoService userInfoService;
+
     @Test
     void add(){
 //        User user = new User();
@@ -28,13 +33,14 @@ class UserDaoTest {
     @Test
     void selectPage(){
 
-        IPage<Map<String, Object>> page = new Page<>(1, 2);
-        IPage<Map<String, Object>> iPage = userDao.selectMapsPage(page, null);
-        System.out.println("总页数:" + iPage.getPages());
-        System.out.println("总记录数:" + iPage.getTotal());
-        List<Map<String, Object>> userList = iPage.getRecords();
-
-        userList.forEach(System.out::println);
+//        IPage<Map<String, Object>> page = new Page<>(1, 2);
+//        IPage<Map<String, Object>> iPage = userDao.selectMapsPage(page, null);
+//        System.out.println("总页数:" + iPage.getPages());
+//        System.out.println("总记录数:" + iPage.getTotal());
+//        List<Map<String, Object>> userList = iPage.getRecords();
+//
+//        userList.forEach(System.out::println);
+        userInfoService.findById(1343110180421775361L);
     }
 
 }

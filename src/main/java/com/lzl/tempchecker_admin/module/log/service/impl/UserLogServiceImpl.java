@@ -31,7 +31,7 @@ public class UserLogServiceImpl implements UserLogService {
     @Override
     public UserLogEntity findById(Long id) {
         QueryWrapper<UserLogEntity> wrapper = new QueryWrapper<>();
-        wrapper.eq("uid",id);
+        wrapper.eq("id",id);
         return userLogDao.selectOne(wrapper);
     }
 

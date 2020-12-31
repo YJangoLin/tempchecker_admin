@@ -1,6 +1,8 @@
 package com.lzl.tempchecker_admin.module.sys.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import com.lzl.tempchecker_admin.enums.LoginStatusEnum;
 import lombok.Data;
 
@@ -16,6 +18,7 @@ import java.util.Date;
 @Data
 @TableName("sys_user")
 public class User {
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId
     private Long id;
     @NotEmpty(message = "账户不能为空字符串")
@@ -33,6 +36,8 @@ public class User {
     private Date createDate;
     @TableField(fill = FieldFill.INSERT_UPDATE)
     private Date updateDate;
+
+    private Integer admin;
 
     public String getStatusValue(){
         if (status==0){

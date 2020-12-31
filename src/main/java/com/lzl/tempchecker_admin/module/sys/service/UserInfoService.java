@@ -1,5 +1,6 @@
 package com.lzl.tempchecker_admin.module.sys.service;
 
+import com.lzl.tempchecker_admin.module.sys.entity.User;
 import com.lzl.tempchecker_admin.module.sys.entity.UserInfo;
 
 /**
@@ -8,4 +9,8 @@ import com.lzl.tempchecker_admin.module.sys.entity.UserInfo;
  **/
 public interface UserInfoService {
     UserInfo findById(Long id);
+
+    String updateById(UserInfo userInfo);
+
+    String save(UserInfo userInfo);
 }

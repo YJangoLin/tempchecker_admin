@@ -26,14 +26,20 @@ public class UserLogController {
     public List<UserLogEntity> findAll(){
         return userLogService.findAll();
     }
-
+    @PostMapping("/save")
+    @ResponseBody
+    public String save(@RequestBody UserLogEntity userLogEntity){
+        return userLogService.save(userLogEntity);
+    }
     @PutMapping("/update")
+    @ResponseBody
     public String update(@RequestBody UserLogEntity userLogEntity){
         return userLogService.updateById(userLogEntity);
     }
 
     @DeleteMapping("/delete/{id}")
-    public String delete(@Param("id")Long id){
+    @ResponseBody
+    public String delete(@PathVariable("id")Long id){
         return userLogService.deleteById(id);
     }
 

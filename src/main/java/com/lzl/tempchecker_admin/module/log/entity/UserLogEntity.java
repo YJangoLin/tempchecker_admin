@@ -1,6 +1,8 @@
 package com.lzl.tempchecker_admin.module.log.entity;
 
 import com.baomidou.mybatisplus.annotation.*;
+import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 
@@ -16,6 +18,7 @@ import java.util.Date;
 @TableName("sys_user_log")
 @NoArgsConstructor
 public class UserLogEntity {
+    @JsonSerialize(using = ToStringSerializer.class)
     @TableId
     private Long id;
     @NotNull
@@ -28,8 +31,12 @@ public class UserLogEntity {
     @TableLogic
     private Integer isDeleted;
 
-    public UserLogEntity(@NotNull @NotEmpty String account, Integer status) {
+    private String operation;
+
+
+    public UserLogEntity(@NotNull @NotEmpty String account, Integer status, String operation) {
         this.account = account;
         this.status = status;
+        this.operation = operation;
     }
 }

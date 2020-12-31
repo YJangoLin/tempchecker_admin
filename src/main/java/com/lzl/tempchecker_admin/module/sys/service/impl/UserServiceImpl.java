@@ -8,6 +8,7 @@ import com.lzl.tempchecker_admin.module.sys.dao.UserDao;
 import com.lzl.tempchecker_admin.module.sys.entity.User;
 import com.lzl.tempchecker_admin.module.sys.service.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -17,9 +18,11 @@ import java.util.Map;
  * Created by Zonglin Liang on 2020/12/29.
  * Describe:
  **/
+@Service
 public class UserServiceImpl implements UserService {
     @Autowired
     UserDao userDao;
+
 
     @Override
     public List<User> getList(Map<String, Object> params) {
@@ -37,5 +40,33 @@ public class UserServiceImpl implements UserService {
         }
 
         return userList1;
+    }
+
+    @Override
+    public List<User> findAll() {
+        return userDao.selectList(null);
+    }
+
+    @Override
+    public String updateById(User user) {
+        userDao.updateById(user);
+        return "操作成功";
+    }
+
+    @Override
+    public String deleteById(Long id) {
+        userDao.deleteById(id);
+        return "操作成功";
+    }
+
+    @Override
+    public String save(User user) {
+        userDao.insert(user);
+        return "操作成功";
+    }
+
+    @Override
+    public List<User> selectByMap(Map<String, Object> map) {
+        return userDao.selectByMap(map);
     }
 }

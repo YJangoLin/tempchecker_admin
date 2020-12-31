@@ -8,6 +8,8 @@ import com.lzl.tempchecker_admin.module.sys.dao.UserDao;
 import com.lzl.tempchecker_admin.module.sys.entity.User;
 import com.lzl.tempchecker_admin.module.sys.entity.UserInfo;
 import com.lzl.tempchecker_admin.module.sys.service.UserInfoService;
+import com.lzl.tempchecker_admin.module.sys.service.UserService;
+import org.apache.ibatis.annotations.Param;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.*;
@@ -32,7 +34,7 @@ public class UserLoginController {
     UserLogService userLogService;
 
     @Autowired
-    UserDao userDao;
+    UserService userService;
 
 
 
@@ -43,7 +45,7 @@ public class UserLoginController {
     @GetMapping("/page")
     @ResponseBody
     public List<User> page(){
-        List<User> users = userDao.selectList(null);
+        List<User> users = userService.findAll();
         return users;
     }
 
@@ -56,16 +58,16 @@ public class UserLoginController {
         params.put("account",user1.getAccount());
         params.put("password",user1.getPassword());
         String result = "";
-        List<User> users = userDao.selectByMap(params);
+        List<User> users = userService.selectByMap(params);
         if (users.size()>0){
             User user = users.get(0);
             user.setStatus(1);
-            session.put("id", user.getId());
-            userLogService.save(new UserLogEntity(user.getAccount(),1));
-            userDao.updateById(user);
+            session.put("user", user);
+            userLogService.save(new UserLogEntity(user.getAccount(),1,"登录"));
+            userService.updateById(user);
             result = "登录成功";
         }else {
-            userLogService.save(new UserLogEntity(user1.getAccount(),0));
+            userLogService.save(new UserLogEntity(user1.getAccount(),0,"登录"));
             result = "密码账号不正确";
         }
         return result;
@@ -74,10 +76,71 @@ public class UserLoginController {
     @GetMapping("/info")
     @ResponseBody
     public UserInfo info(){
-        if (session.get("id")!=null){
-            return userInfoService.findById((Long) session.get("id"));
+//        System.out.println("进入info");
+//        System.out.println(session.get("user"));
+        if (session.get("user")!=null){
+            User user = (User) session.get("user");
+            return userInfoService.findById(user.getId());
         }else {
             return null;
+        }
+
+    }
+
+    @PostMapping("/save")
+    @ResponseBody
+    public String save(@RequestBody User user){
+        try {
+            if (session.get("user")!=null){
+                User user1 = (User) session.get("user");
+                userLogService.save(new UserLogEntity(user1.getAccount(),1,"添加用户"));
+            }
+            return userService.save(user);
+        }catch (Exception e){
+            if (session.get("user")!=null){
+                User user1 = (User) session.get("user");
+                userLogService.save(new UserLogEntity(user.getAccount(),0,"添加用户"));
+            }
+            return "操作失败";
+        }
+
+    }
+    @GetMapping("/getAuthor")
+    @ResponseBody
+    public String  getAuthor(){
+        User user = (User) session.get("user");
+        return user.getAdmin()==1? "admin":"user";
+    }
+
+    @DeleteMapping("/delete/{id}")
+    @ResponseBody
+    public String deleted(@PathVariable("id")Long id){
+        try {
+            if (session.get("user")!=null){
+                User user = (User) session.get("user");
+                userLogService.save(new UserLogEntity(user.getAccount(),1,"删除用户"));
+            }
+            return userService.deleteById(id);
+        }catch (Exception e){
+            if (session.get("user")!=null){
+                User user = (User) session.get("user");
+                userLogService.save(new UserLogEntity(user.getAccount(),0,"删除用户"));
+            }
+            return "操作失败";
+        }
+
+
+    }
+
+    @PutMapping("/update")
+    @ResponseBody
+    public String update(@RequestBody User user){
+        try{
+            new UserLogEntity(user.getAccount(),1,"更新用户");
+            return userService.updateById(user);
+        }catch (Exception e){
+            new UserLogEntity(user.getAccount(),0,"更新用户");
+            return "操作失败";
         }
 
     }
