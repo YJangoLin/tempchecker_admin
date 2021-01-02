@@ -1,5 +1,6 @@
 package com.lzl.tempchecker_admin.module.sys.service;
 
+import com.baomidou.mybatisplus.core.metadata.IPage;
 import com.baomidou.mybatisplus.extension.plugins.pagination.Page;
 import com.lzl.tempchecker_admin.module.sys.entity.User;
 
@@ -11,7 +12,7 @@ import java.util.Map;
  * Describe:
  **/
 public interface UserService {
-    List<User> getList(Map<String, Object> params);
+    IPage<Map<String,Object>> page(Map<String,Object> params,Integer pageNum);
 
     List<User> findAll();
 

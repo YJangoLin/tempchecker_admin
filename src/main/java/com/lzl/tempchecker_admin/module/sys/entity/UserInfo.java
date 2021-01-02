@@ -33,6 +33,7 @@ public class UserInfo {
     @Email(regexp = "^[a-zA-Z0-9_.-]+@[a-zA-Z0-9-]+(\\\\.[a-zA-Z0-9-]+)*\\\\.[a-zA-Z0-9]{2,6}$",message = "请输入正确的邮箱格式")
     private String email;
     private String headImage;
+    @JsonSerialize(using = ToStringSerializer.class)
     @NotNull
     private Long userId;
     @TableField(fill = FieldFill.INSERT)

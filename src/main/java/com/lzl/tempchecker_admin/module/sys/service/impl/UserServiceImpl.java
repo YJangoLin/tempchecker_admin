@@ -11,6 +11,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -24,22 +25,42 @@ public class UserServiceImpl implements UserService {
     UserDao userDao;
 
 
-    @Override
-    public List<User> getList(Map<String, Object> params) {
-        List<User> userList1 = new ArrayList<>();
-        IPage<Map<String, Object>> page = new Page<>(1, 2);
-        QueryWrapper<User> wrapper = new QueryWrapper<>();
-        wrapper.allEq(params);
-        IPage<Map<String, Object>> iPage = userDao.selectMapsPage(page, wrapper);
-        System.out.println("总页数:" + iPage.getPages());
-        System.out.println("总记录数:" + iPage.getTotal());
-        List<Map<String, Object>> userList = iPage.getRecords();
-        for (Map<String,Object> map: userList){
-            User user = JSON.parseObject(JSON.toJSONString(map), User.class);
-            userList1.add(user);
-        }
+//    @Override
+//    public List<User> getList(Map<String, Object> params) {
+//        List<User> userList1 = new ArrayList<>();
+//        IPage<Map<String, Object>> page = new Page<>(1, 2);
+//        QueryWrapper<User> wrapper = new QueryWrapper<>();
+//        wrapper.allEq(params);
+//        IPage<Map<String, Object>> iPage = userDao.selectMapsPage(page, wrapper);
+//        System.out.println("总页数:" + iPage.getPages());
+//        System.out.println("总记录数:" + iPage.getTotal());
+//        List<Map<String, Object>> userList = iPage.getRecords();
+//        for (Map<String,Object> map: userList){
+//            User user = JSON.parseObject(JSON.toJSONString(map), User.class);
+//            userList1.add(user);
+//        }
 
-        return userList1;
+//        return userList1;
+//    }
+
+    @Override
+    public IPage<Map<String,Object>> page(Map<String, Object> params,Integer pageNum) {
+        QueryWrapper<User> wrapper = new QueryWrapper<>();
+        if (params.get("account")!=null){
+            wrapper.like("account", params.get("account"));
+        }if (params.get("create_date")!=null){
+            wrapper.ge("create_date",params.get("create_date"));
+        }if (params.get("status")!=null){
+            wrapper.eq("status",params.get("status"));
+        }
+        Integer count = userDao.selectCount(wrapper);
+        IPage<Map<String, Object>> page;
+        if (pageNum==null){
+            page = new Page<>(1, 10,count);
+        }else {
+            page = new Page<>(pageNum, 10,count);
+        }
+        return userDao.selectMapsPage(page,wrapper);
     }
 
     @Override

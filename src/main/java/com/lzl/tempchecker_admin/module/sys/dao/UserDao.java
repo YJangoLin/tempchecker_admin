@@ -13,5 +13,5 @@ import java.util.List;
 import java.util.Map;
 
 public interface UserDao extends BaseMapper<User> {
-    IPage<User> selectMapPage(Page<User> page, @Param(Constants.WRAPPER) Wrapper<User> wrapper);
+    List<User> getList(Map<String, Object> params);
 }
